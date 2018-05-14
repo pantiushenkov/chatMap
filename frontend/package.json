@@ -18,8 +18,7 @@
     "eject": "react-native-scripts eject",
     "android": "react-native-scripts android",
     "ios": "react-native-scripts ios",
-    "test": "node node_modules/jest/bin/jest.js",
-    "postinstall": "rm ./node_modules/react-native/local-cli/core/__fixtures__/files/package.json"
+    "test": "node node_modules/jest/bin/jest.js"
   },
   "jest": {
     "preset": "jest-expo"
@@ -42,6 +41,7 @@
     "react-native-material-textfield": "^0.12.0",
     "react-native-snackbar": "^0.4.6",
     "react-native-vector-icons": "^4.6.0",
+    "react-navigation": "^2.0.1",
     "react-redux": "^5.0.7",
     "react-thunk": "^1.0.0",
     "redux": "^4.0.0",

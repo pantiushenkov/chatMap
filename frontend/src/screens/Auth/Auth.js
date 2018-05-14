@@ -13,11 +13,8 @@ import {TextField} from 'react-native-material-textfield';
 import {TextButton} from 'react-native-material-buttons';
 
 import {cs} from 'src/styles/CommonStyles';
-import Icon from 'react-native-vector-icons/MaterialIcons';
-import {LoadingIndicator} from "src/modules/LoadingIndicator";
 import {handleChange} from "src/components/Form/HandleChange";
-import Error from "../../components/Error";
-
+import Error from "src/components/Error";
 
 class Login extends Component {
   state = {
@@ -95,8 +92,8 @@ const deviceWidth = Dimensions.get('window').width;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 32,
     backgroundColor: cs.primaryColor,
+    padding: 20,
   },
   logoContainer: {
     flex: 4,

@@ -6,7 +6,8 @@ const User = new Schema({
   username: String,
   email: String,
   image: String,
-  password: String
+  password: String,
+  chats: [String]
 });
 
 export default mongoose.model('User', User);

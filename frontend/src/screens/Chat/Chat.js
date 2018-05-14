@@ -11,7 +11,6 @@ import styles from 'src/styles/CommonStyles'
 import {MessageEntry} from "src/screens/Chat/MessageEntry";
 
 import search from 'chat-engine-online-user-search';
-import DeveloperMenu from "../../services/DeveloperMenu";
 import LoadingIndicator from "../../modules/LoadingIndicator/LoadingIndicator";
 import {chatActions} from "./ChatReducer";
 
@@ -68,7 +67,7 @@ class Chat extends React.Component {
     const {me, chat} = this.props.chatState;
 
     return (
-      <View style={styles.container}>
+      <View>
         {chat ? (
           <View style={{flex: 1}}>
             <MessageList chat={chat} me={me}/>
@@ -77,7 +76,6 @@ class Chat extends React.Component {
         ) : (
           <LoadingIndicator target={'chat'}/>
         )}
-        <DeveloperMenu/>
       </View>
     );
   }

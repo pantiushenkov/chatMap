@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
 
-import {StyleSheet, View, ScrollView, FlatList, Text, Animated} from "react-native";
+import {StyleSheet, View, Text} from "react-native";
 import {authActions} from "../Auth/AuthReducer";
 
 class TypingIndicator extends Component {
