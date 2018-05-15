@@ -7,7 +7,7 @@ const User = new Schema({
   email: String,
   image: String,
   password: String,
-  chats: [String]
+  chats: [{id: String, name: String}]
 });
 
 export default mongoose.model('User', User);

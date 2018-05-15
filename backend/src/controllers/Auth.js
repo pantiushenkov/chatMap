@@ -51,9 +51,8 @@ router.post('/register', async (req, res) => {
   });
 });
 
-const getUser = (res, payload) => (
-  User.findOne(payload, (error, data) => error ? catchError(res, error, 500) : data)
+export const getUser = (res, payload, find = 'findOne') => (
+  User[find](payload, (error, data) => error ? catchError(res, error, 500) : data)
 );
-
 
 export default router;

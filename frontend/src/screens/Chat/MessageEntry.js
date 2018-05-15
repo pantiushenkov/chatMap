@@ -62,6 +62,7 @@ export class MessageEntry extends Component {
             placeholder="Send Message"
             onChangeText={this.setChatInput}
             onSubmitEditing={this.sendChat}
+            autoCapitalize="none"
           />
           <TouchableOpacity
             style={{backgroundColor: "#D02129"}}

@@ -6,19 +6,16 @@ import {Text, View, StyleSheet, Image, Button, ScrollView} from 'react-native';
 import {chatActions} from '../ChatReducer';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import DialogItem from './DialogItem';
-import {cs} from 'src/styles/CommonStyles';
+import DialogList from "./DialogList";
 
 const dialogs = [
   {
     id: 1,
-    text: "Milk",
-    toBuy: true
+    name: "Milk",
   },
   {
     id: 2,
-    text: "Eggs Medium 12 pack",
-    toBuy: false
+    name: "Eggs",
   },
 ];
 
@@ -51,35 +48,24 @@ class ChatDialogs extends React.Component {
           backgroundColor='transparent'
           color="black" size={30}
           underlayColor='transparent'
-          onPress={() => navigation.navigate('Add')}/>
+          onPress={() => navigation.navigate('AddPublicChat')}/>
       ),
     };
   };
 
   render() {
-    const {state, setParams} = this.props.navigation;
+    const {state} = this.props.navigation;
     const {editing} = state.params || false;
 
+    const {data: {user}} = this.props.authState;
+
     return (
-      <ScrollView style={styles.list}>
-        <View style={styles.list}>
-          {dialogs.map(item => <DialogItem
-            editing={editing}
-            key={item.id}
-            item={item}
-            onOpen={(bool) => this.onOpen(bool, item.id)}
-          />)}
-        </View>
+      <ScrollView>
+        <DialogList list={user.chats} editing={editing} dialogItem={true}/>
       </ScrollView>
     )
   }
 }
-
-const styles = StyleSheet.create({
-  list: {
-    backgroundColor: cs.primaryColor,
-  }
-});
 
 export default connect(
   ({chatState, authState}) => ({

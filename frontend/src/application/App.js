@@ -11,8 +11,9 @@ import DeveloperMenu from "../services/DeveloperMenu";
 import Search from "../screens/Search/Search";
 import Icon from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-
 import {cs} from 'src/styles/CommonStyles';
+import AddPublicChat from "src/screens/AddPublicChat/AddPublicChat";
+import ChatEngineCore from "src/modules/ChatEngineCore/ChatEngineCore";
 
 class App extends React.Component {
   async componentDidMount() {
@@ -29,7 +30,9 @@ class App extends React.Component {
     return (
       <View style={styles.container}>
         {token ?
-          <AppNavigator/> :
+          <ChatEngineCore>
+            <AppNavigator/>
+          </ChatEngineCore> :
           <Login/>
         }
         <DeveloperMenu/>
@@ -42,9 +45,9 @@ const HomeStack = createStackNavigator({
   Home: {
     screen: ChatDialogs
   },
-  // Add: {
-  //   screen: AddScreen
-  // },
+  AddPublicChat: {
+    screen: AddPublicChat
+  },
 })
 
 const AppNavigator = createBottomTabNavigator({
@@ -62,7 +65,7 @@ const AppNavigator = createBottomTabNavigator({
       ),
     }
   },
-  Notifications: {
+  Search: {
     screen: Search,
     navigationOptions: {
       tabBarLabel: 'Search',

@@ -4,7 +4,9 @@ import Icon from 'react-native-vector-icons/Entypo';
 
 export default class DialogItem extends Component {
   render() {
-    const {item: {text, toBuy}, editing} = this.props;
+    const {item, editing, dialogItem} = this.props;
+
+    const name = dialogItem ? item.name : item.email;
 
     return (
       <View style={styles.block}>
@@ -17,8 +19,8 @@ export default class DialogItem extends Component {
             onPress={this.onClick}/>
         </View>
         <View style={styles.innerBlock}>
-          <Text style={styles.header}>{text}</Text>
-          <Text style={styles.text}>{text}</Text>
+          <Text style={styles.header}>{name}</Text>
+          <Text style={styles.text}>{dialogItem ? 'public chat' : 'private chat'}</Text>
         </View>
       </View>
     );
