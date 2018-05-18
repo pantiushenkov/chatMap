@@ -2,7 +2,7 @@ import {createReducer} from "src/reducer/createReducer";
 import {post} from 'src/services/Request'
 import {AsyncStorage} from "react-native";
 import axios from 'src/services/Axios';
-import {ADD_CHAT} from "src/reducer/GlobalConstants";
+import {CREATE_CHAT} from "src/reducer/GlobalConstants";
 
 const initialState = {errors: {}, data: {}};
 const LOGIN = 'LOGIN';
@@ -45,7 +45,10 @@ export const authActions = {
 
 const reducers = {
   [LOGIN]: (state, payload) => ({...state, ...payload}),
-  [ADD_CHAT]: (state, payload) => ({...state, data: {...state.data, user: payload.data.user}}),
+  [CREATE_CHAT]: (state, payload) => ({
+    ...state,
+    data: {...state.data, user: payload.data ? payload.data.user : state.data.user}
+  }),
   [SET_DATA]: (state, {ChatEngine, ...payload}) => ({...state, ...payload}),
 };
 

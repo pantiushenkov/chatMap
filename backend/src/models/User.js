@@ -7,7 +7,7 @@ const User = new Schema({
   email: String,
   image: String,
   password: String,
-  chats: [{id: String, name: String}]
+  chats: [{id: String, name: String, publicChat: Boolean}]
 });
 
 export default mongoose.model('User', User);

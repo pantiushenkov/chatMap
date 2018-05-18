@@ -2,18 +2,19 @@ import React from 'react'
 import {chatActions} from "src/screens/Chat/ChatReducer";
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
+
 import ChatEngineInit from 'chat-engine';
 
 const ChatEngine = ChatEngineInit.create({
-  publishKey: 'pub-c-40a833bf-50ca-44b2-8584-5336b714a54c',
-  subscribeKey: 'sub-c-84f074fa-2bbf-11e8-9322-6e836ba663ef'
+  publishKey: 'pub-c-fd2c86fc-9624-41a1-97af-66674327f92a',
+  subscribeKey: 'sub-c-738a04ca-508f-11e8-98ad-ca969c41bada'
 });
 
 const now = new Date().getTime();
 
 class ChatEngineCore extends React.Component {
   componentDidMount() {
-    const {chatActions, authState} = this.props;
+    const {chatActions, authState, navigation} = this.props;
     console.disableYellowBox = true;
     const {email: username} = authState.data.user;
 
@@ -24,13 +25,20 @@ class ChatEngineCore extends React.Component {
     }, 'auth-key');
 
     ChatEngine.on('$.ready', (data) => {
-      chatActions.setData({ChatEngine, me: data.me})
+      const me = data.me;
+      console.log(me)
+      chatActions.setData({ChatEngine, me});
+      let chat = null;
+
+      me.direct.on('$.invite', (payload) => {
+        chat = new ChatEngine.Chat(payload.data.channel);
+      });
+
     });
   }
 
   render() {
-    const {children} = this.props;
-    return children;
+    return this.props.children;
   }
 }
 

@@ -16,10 +16,14 @@ class AddPublicChat extends React.Component {
 
   handleChange = handleChange.bind(this);
 
+  componentDidMount() {
+    console.log('kfioxjfoxj');
+  }
+
   handleSubmit = () => {
     const {chatActions} = this.props;
     const {data: {name}} = this.state;
-    chatActions.addChat({id: name, name, publicChat: true});
+    chatActions.createChat({id: name, name, publicChat: true});
   };
 
   render() {
@@ -58,11 +62,11 @@ class AddPublicChat extends React.Component {
   }
 }
 
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 20,
+    backgroundColor: 'white',
   },
   containerInput: {
     paddingLeft: 20,

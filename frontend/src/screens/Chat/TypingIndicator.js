@@ -27,7 +27,7 @@ class TypingIndicator extends Component {
 
   renderTypingIndicator() {
     const {isTyping, userTyping} = this.state;
-    const {me} = this.props.chatState;
+    const {me} = this.props.authState;
 
     if (isTyping && me.uuid !== userTyping) {
       return (<View><Text> {userTyping} is typing... </Text></View>);
@@ -46,8 +46,8 @@ class TypingIndicator extends Component {
 const styles = StyleSheet.create({});
 
 export default connect(
-  ({chatState}) => ({
-    chatState
+  ({chatState, authState}) => ({
+    chatState, authState
   }),
   (dispatch) => ({
     authActions: bindActionCreators(authActions, dispatch),

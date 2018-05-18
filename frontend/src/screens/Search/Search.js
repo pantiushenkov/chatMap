@@ -7,6 +7,7 @@ import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
 import Chat from "../Chat/Chat";
 import DialogScrollList from "../Chat/DialogsPage/DialogList";
+import UserItem from "../../modules/User/UserItem";
 
 const WAIT_INTERVAL = 1000;
 
@@ -14,6 +15,11 @@ class Search extends Component {
   state = {
     value: '',
   };
+
+  componentWillUnmount() {
+    const {searchActions} = this.props;
+    searchActions.clear()
+  }
 
   componentWillMount() {
     this.timer = null;
@@ -51,8 +57,10 @@ class Search extends Component {
           />
         </View>
         <ScrollView>
-          <DialogScrollList list={chat} dialogItem={true}/>
-          <DialogScrollList list={user} dialogItem={false}/>
+          <View style={styles.textBlock}>
+            {user.map(a => (<UserItem key={a.email} item={a}/>))}
+          </View>
+          <DialogScrollList list={chat}/>
         </ScrollView>
       </View>
     );
@@ -68,8 +76,6 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
     paddingRight: 20,
     paddingBottom: 10,
-    borderBottomWidth: 2,
-    borderBottomColor: cs.primaryColor
   },
   textBlock: {
     alignItems: 'center',

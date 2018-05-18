@@ -1,12 +1,15 @@
 import React, {Component} from 'react';
-import {Text, View, StyleSheet} from 'react-native';
+import {Text, View, StyleSheet, TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/Entypo';
+import {withNavigation} from 'react-navigation';
+import MaterialInitials from 'react-native-material-initials/native';
+import {cs} from "../../../styles/CommonStyles";
 
+@withNavigation
 export default class DialogItem extends Component {
   render() {
-    const {item, editing, dialogItem} = this.props;
-
-    const name = dialogItem ? item.name : item.email;
+    const {item, editing, navigation} = this.props;
+    const chatName = item.name;
 
     return (
       <View style={styles.block}>
@@ -16,11 +19,27 @@ export default class DialogItem extends Component {
             backgroundColor={'#fff'}
             color={'black'}
             size={25}
-            onPress={this.onClick}/>
+          />
         </View>
         <View style={styles.innerBlock}>
-          <Text style={styles.header}>{name}</Text>
-          <Text style={styles.text}>{dialogItem ? 'public chat' : 'private chat'}</Text>
+          <TouchableOpacity onPress={() => navigation.navigate('Chat', {chatName})}>
+            <View style={styles.innerContainer}>
+              <View style={styles.iconBlockShow}>
+                <MaterialInitials
+                  style={{alignSelf: 'center'}}
+                  backgroundColor={cs.primaryColor}
+                  color={'white'}
+                  size={40}
+                  text={chatName}
+                  single={true}
+                />
+              </View>
+              <View style={styles.innerBlock}>
+                <Text style={styles.header}>{chatName}</Text>
+                <Text style={styles.text}>{'public chat'}</Text>
+              </View>
+            </View>
+          </TouchableOpacity>
         </View>
       </View>
     );
@@ -28,6 +47,11 @@ export default class DialogItem extends Component {
 }
 
 const styles = StyleSheet.create({
+  innerContainer: {
+    justifyContent: 'space-between',
+    display: 'flex',
+    flexDirection: 'row'
+  },
   container: {
     backgroundColor: "black",
     borderBottomWidth: 1,
@@ -59,13 +83,19 @@ const styles = StyleSheet.create({
   },
   iconBlock: {
     display: 'flex',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     alignItems: 'center',
     width: 50,
     marginLeft: -40,
   },
   iconBlockShow: {
-    marginLeft: 0,
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: 50,
+    marginLeft: -10,
+    marginTop: 10,
+    marginRight: 10,
   },
   innerBlock: {
     flex: 1,

@@ -4,12 +4,17 @@ import chatState from 'src/screens/Chat/ChatReducer';
 import authState from 'src/screens/Auth/AuthReducer';
 import searchState from 'src/screens/Search/SearchReducer';
 import loadingIndicatorState from 'src/modules/LoadingIndicator/LoadingIndicatorState';
+import {createNavigationReducer} from 'react-navigation-redux-helpers';
+import {AppNavigator, HomeStack} from "../application/App";
+
+const navigationState = createNavigationReducer(HomeStack);
 
 const reducers = {
   chatState,
   authState,
   searchState,
-  loadingIndicatorState
+  loadingIndicatorState,
+  navigationState
 };
 
 export default combineReducers(

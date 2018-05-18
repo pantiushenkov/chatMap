@@ -2,18 +2,40 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 
-import {View} from 'react-native';
+import {KeyboardAvoidingView, StyleSheet, TouchableOpacity, View} from 'react-native';
 import typingIndicator from 'chat-engine-typing-indicator';
-
+import search from 'chat-engine-online-user-search';
 import {MessageList} from 'chat-engine-react-native';
-import styles from 'src/styles/CommonStyles'
 import {MessageEntry} from "src/screens/Chat/MessageEntry";
 
-import search from 'chat-engine-online-user-search';
 import LoadingIndicator from "../../modules/LoadingIndicator/LoadingIndicator";
 import {chatActions} from "./ChatReducer";
+import MaterialInitials from 'react-native-material-initials/native';
+import {withNavigation} from "react-navigation";
+import {cs} from "../../styles/CommonStyles";
+import emoji from "chat-engine-emoji";
 
+@withNavigation
 class Chat extends React.Component {
+  static navigationOptions = ({navigation}) => {
+    const {state, navigate} = navigation;
+    return {
+      title: state.params.chatName,
+      headerRight:
+        (
+          <TouchableOpacity onPress={() => navigate('Info')}>
+            <MaterialInitials
+              style={{alignSelf: 'center', marginRight: 10}}
+              backgroundColor={cs.primaryColor}
+              color={'white'}
+              size={30}
+              text={state.params.chatName}
+              single={true}
+            />
+          </TouchableOpacity>)
+    }
+  };
+
   constructor(props) {
     super(props);
 
@@ -25,55 +47,67 @@ class Chat extends React.Component {
   }
 
   componentDidMount() {
-    //chatengine throws some warning about timing that is a part of the library itself
-    console.disableYellowBox = true;
-    const {email: username} = this.props.authState.data.user;
+    const {chatState, navigation, authState, chatActions} = this.props;
+    const {chatName, email} = navigation.state.params;
+    const {me} = authState;
+    const {ChatEngine} = chatState;
 
-    ChatEngine.connect(username, {
-      username,
-      signedOnTime: now,
-      uuid: username
-    }, 'auth-key');
+    if (!authState.data.user.chats.filter(a => a.name === (chatName))[0]) {
+      chatActions.addToChat({
+        id: chatName ? chatName : me.uuid + '-' + email,
+        name: chatName ? chatName : email,
+        publicChat: !!chatName,
+      })
+    }
 
-    ChatEngine.on('$.ready', (data) => {
-        console.log(data);
-        const me = data.me;
-        // console.log(me);
-        const chatName = 'ForthChat';
-        const chat = new ChatEngine.Chat(chatName, false);
+    const chat = new ChatEngine.Chat(chatName);
 
-        chat.plugin(typingIndicator({timeout: 5000})); //set this if you want your message entry to have a typing indicator
-        chat.plugin(search());
+    chat.plugin(typingIndicator({timeout: 5000}));
 
-        chat.on('$.connected', (data) => {
+    chat.plugin(emoji());
 
-          const {chatActions} = this.props;
+    chat.on('$.connected', (data) => {
+      setTimeout(() => {
+        chatActions.setData({chat: data.chat});
+        // console.log('invite Nik');
+        // chat.invite('Nik');
 
-          // console.log(data.chat.onlineUserSearch.search('s'))
-          // chatActions.setData({chat: data.chat});
-          this.setState({chat: data.chat, renderChat: true, me});
-        })
-      }
-    );
+        chat.on('$.online.*', (data) => {
+          console.log('$.online.*', data);
+        });
+
+// when a user goes offline, remove them from the online list
+        chat.on('$.offline.*', (data) => {
+          console.log('$.offline.*', data);
+        });
+      }, 0);
+      // chatActions.setData({chat: data.chat});
+      this.setState({chat, renderChat: true, me});
+    })
   }
 
   render() {
-    const {me, chat} = this.props.chatState;
-    console.log(chat)
+    const {me} = this.props.chatState;
+    const {chat} = this.state;
+
     return (
-      <View>
+      <KeyboardAvoidingView
+        behavior='padding'
+        keyboardVerticalOffset={-126}
+      >
         {chat ? (
-          <View style={{flex: 1}}>
+          <View style={{height: '100%', display: 'flex'}}>
             <MessageList chat={chat} me={me}/>
             <MessageEntry chat={chat} typingIndicator/>
           </View>
         ) : (
           <LoadingIndicator target={'chat'}/>
         )}
-      </View>
+      </KeyboardAvoidingView>
     );
   }
 }
+
 
 export default connect(
   ({chatState, authState}) => ({

@@ -14,6 +14,8 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import {cs} from 'src/styles/CommonStyles';
 import AddPublicChat from "src/screens/AddPublicChat/AddPublicChat";
 import ChatEngineCore from "src/modules/ChatEngineCore/ChatEngineCore";
+import Chat from "../screens/Chat/Chat";
+import Info from "../screens/Chat/Info";
 
 class App extends React.Component {
   async componentDidMount() {
@@ -41,28 +43,45 @@ class App extends React.Component {
   }
 }
 
-const HomeStack = createStackNavigator({
+export const HomeStack = createStackNavigator({
   Home: {
     screen: ChatDialogs
   },
   AddPublicChat: {
     screen: AddPublicChat
   },
+  Chat: {
+    screen: Chat,
+  },
+  Info: {
+    screen: Info,
+  },
 })
 
-const AppNavigator = createBottomTabNavigator({
+const skipRoutes = [
+  'Info', 'Chat'
+]
+
+export const AppNavigator = createBottomTabNavigator({
   Home: {
     screen: HomeStack,
-    navigationOptions: {
-      tabBarLabel: 'Chats',
-      tabBarIcon: ({focused}) => (
-        <Icon
-          name="ios-chatbubbles"
-          backgroundColor='red'
-          color={focused ? 'black' : 'grey'} size={30}
-          underlayColor='black'
-        />
-      ),
+    navigationOptions: ({navigation}) => {
+      const routes = navigation.state.routes;
+      const route = routes[routes.length - 1].routeName;
+      if (skipRoutes.includes(route)) {
+        return {tabBarVisible: false}
+      }
+      return {
+        tabBarLabel: 'Chats',
+        tabBarIcon: ({focused}) => (
+          <Icon
+            name="ios-chatbubbles"
+            backgroundColor='red'
+            color={focused ? 'black' : 'grey'} size={30}
+            underlayColor='black'
+          />
+        ),
+      }
     }
   },
   Search: {
@@ -80,7 +99,6 @@ const AppNavigator = createBottomTabNavigator({
   },
 }, {
   animationEnabled: true,
-  tabBarOptions: {},
 });
 
 const styles = StyleSheet.create({
@@ -94,8 +112,8 @@ const styles = StyleSheet.create({
 });
 
 export default connect(
-  ({authState}) => ({
-    authState
+  ({authState, navigationState}) => ({
+    authState, navigationState
   }),
   (dispatch) => ({
     authActions: bindActionCreators(authActions, dispatch),

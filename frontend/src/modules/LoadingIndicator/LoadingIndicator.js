@@ -12,8 +12,7 @@ class LoadingIndicator extends Component {
 
 
     const isVisible = loadingIndicatorState[target];
-    console.log('target', target);
-    console.log('isVisible', isVisible);
+
     return isVisible ? (
       <View style={styles.container}>
         <ActivityIndicator style={styles.centered}/>

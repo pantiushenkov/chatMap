@@ -8,21 +8,9 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import DialogList from "./DialogList";
 
-const dialogs = [
-  {
-    id: 1,
-    name: "Milk",
-  },
-  {
-    id: 2,
-    name: "Eggs",
-  },
-];
-
-
 class ChatDialogs extends React.Component {
   static navigationOptions = ({navigation}) => {
-    const {state, setParams} = navigation;
+    const {state} = navigation;
     const {editing} = state.params || false;
     return {
       gesturesEnabled: false,
@@ -60,12 +48,19 @@ class ChatDialogs extends React.Component {
     const {data: {user}} = this.props.authState;
 
     return (
-      <ScrollView>
+      <ScrollView style={styles.container}>
         <DialogList list={user.chats} editing={editing} dialogItem={true}/>
       </ScrollView>
     )
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: 'white',
+  }
+});
 
 export default connect(
   ({chatState, authState}) => ({

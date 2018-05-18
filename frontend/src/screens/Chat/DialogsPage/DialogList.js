@@ -5,12 +5,8 @@ import {cs} from 'src/styles/CommonStyles';
 
 
 class DialogList extends React.Component {
-  handleClick = () => {
-    console.log('click');
-  };
-
   render() {
-    const {list, editing, dialogItem} = this.props;
+    const {list, editing} = this.props;
 
     if (!list) return null;
 
@@ -21,8 +17,6 @@ class DialogList extends React.Component {
             key={item._id}
             editing={editing}
             item={item}
-            onOpen={this.handleClick}
-            dialogItem={dialogItem}
           />
         ))}
       </View>
