@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Text, View, StyleSheet, TextInput, ScrollView} from 'react-native';
+import {Text, View, StyleSheet, TextInput, ScrollView, TouchableOpacity} from 'react-native';
 import {withNavigation} from 'react-navigation';
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
@@ -8,11 +8,29 @@ import DialogScrollList from "src/screens/Chat/DialogsPage/DialogList";
 import UserItem from "../../modules/User/UserItem";
 import {cs} from "../../styles/CommonStyles";
 import {searchActions} from "../Search/SearchReducer";
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 const WAIT_INTERVAL = 1000;
 
 @withNavigation
 class Info extends Component {
+  static navigationOptions = ({navigation}) => {
+    const {state, navigate} = navigation;
+    const {chatName} = state.params;
+    return {
+      title: chatName,
+      headerRight: (
+        <Icon.Button
+          name="map-marker"
+          backgroundColor='transparent'
+          color="black" size={30}
+          underlayColor='transparent'
+          style={{marginLeft: 10}}
+          onPress={() => navigate('Map', {chatName})}
+        />)
+    }
+  };
+
   state = {
     value: '',
     onlineUsers: [],
@@ -22,9 +40,6 @@ class Info extends Component {
   componentDidMount() {
     const {chatState} = this.props;
     const {chat} = chatState;
-    console.log('did mount', chat);
-    // when a user comes online, render them in the online list
-
   }
 
   componentWillUnmount() {
@@ -54,10 +69,12 @@ class Info extends Component {
   }
 
   render() {
-    const {searchState, chatState} = this.props;
+    const {searchState, navigation} = this.props;
     const {data: {user}} = searchState;
-    console.log(chatState);
-    const chatUsers = Object.keys(chatState.chat.users).map(a => ({email: a}));
+
+    const {chat} = navigation.state.params;
+
+    const chatUsers = Object.keys(chat.users).map(a => ({email: a}));
 
     const {value} = this.state;
     return (

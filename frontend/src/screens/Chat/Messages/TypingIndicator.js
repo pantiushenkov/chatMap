@@ -3,17 +3,13 @@ import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
 
 import {StyleSheet, View, Text} from "react-native";
-import {authActions} from "../Auth/AuthReducer";
+import {authActions} from "../../Auth/AuthReducer";
 
 class TypingIndicator extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      isTyping: false,
-      userTyping: "",
-    };
-  }
+  state = {
+    isTyping: false,
+    userTyping: "",
+  };
 
   componentDidMount() {
     this.props.chat.on('$typingIndicator.startTyping', (payload) => {

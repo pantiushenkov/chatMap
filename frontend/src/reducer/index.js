@@ -5,7 +5,9 @@ import authState from 'src/screens/Auth/AuthReducer';
 import searchState from 'src/screens/Search/SearchReducer';
 import loadingIndicatorState from 'src/modules/LoadingIndicator/LoadingIndicatorState';
 import {createNavigationReducer} from 'react-navigation-redux-helpers';
-import {AppNavigator, HomeStack} from "../application/App";
+import messageState from 'src/screens/Chat/Messages/MessagesReducer';
+import {HomeStack} from "../application/App";
+
 
 const navigationState = createNavigationReducer(HomeStack);
 
@@ -14,6 +16,7 @@ const reducers = {
   authState,
   searchState,
   loadingIndicatorState,
+  messageState,
   navigationState
 };
 

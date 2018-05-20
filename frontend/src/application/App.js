@@ -16,6 +16,7 @@ import AddPublicChat from "src/screens/AddPublicChat/AddPublicChat";
 import ChatEngineCore from "src/modules/ChatEngineCore/ChatEngineCore";
 import Chat from "../screens/Chat/Chat";
 import Info from "../screens/Chat/Info";
+import Map from "../screens/Map/Map";
 
 class App extends React.Component {
   async componentDidMount() {
@@ -56,11 +57,14 @@ export const HomeStack = createStackNavigator({
   Info: {
     screen: Info,
   },
-})
+  Map: {
+    screen: Map,
+  },
+});
 
 const skipRoutes = [
-  'Info', 'Chat'
-]
+  'Info', 'Chat', 'Map'
+];
 
 export const AppNavigator = createBottomTabNavigator({
   Home: {

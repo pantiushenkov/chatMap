@@ -7,6 +7,8 @@ import {chatActions} from '../ChatReducer';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import DialogList from "./DialogList";
+import DialogItem from "./DialogItem";
+import {cs} from "../../../styles/CommonStyles";
 
 class ChatDialogs extends React.Component {
   static navigationOptions = ({navigation}) => {
@@ -42,14 +44,14 @@ class ChatDialogs extends React.Component {
   };
 
   render() {
-    const {state} = this.props.navigation;
-    const {editing} = state.params || false;
 
-    const {data: {user}} = this.props.authState;
+    const {navigation, chats} = this.props;
+    const {state} = navigation;
+    const {editing} = state.params || false;
 
     return (
       <ScrollView style={styles.container}>
-        <DialogList list={user.chats} editing={editing} dialogItem={true}/>
+        <DialogList list={chats} editing={editing} dialogItem={true}/>
       </ScrollView>
     )
   }
@@ -59,12 +61,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
-  }
+  },
 });
 
 export default connect(
   ({chatState, authState}) => ({
-    chatState,
+    chats: chatState.chats,
     authState,
   }),
   (dispatch) => ({

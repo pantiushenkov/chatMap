@@ -12,7 +12,7 @@ class DialogList extends React.Component {
 
     return (
       <View style={styles.list}>
-        {list.map(item => (
+        {Object.values(list).map(item => (
           <DialogItem
             key={item._id}
             editing={editing}

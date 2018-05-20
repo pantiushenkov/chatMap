@@ -16,7 +16,7 @@ class UserItem extends Component {
       console.log(user);
       chatState.chat.invite(user);
     } else {
-      navigation.navigate('Chat', {});
+       // navigation.navigate('Chat', {});
     }
   }
 

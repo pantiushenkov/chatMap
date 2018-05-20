@@ -4,12 +4,24 @@ import Icon from 'react-native-vector-icons/Entypo';
 import {withNavigation} from 'react-navigation';
 import MaterialInitials from 'react-native-material-initials/native';
 import {cs} from "../../../styles/CommonStyles";
+import {getChatName} from "src/services/getChatName";
+import {connect} from "react-redux";
+import {bindActionCreators} from "redux";
+import {messageActions} from "../Messages/MessagesReducer";
 
 @withNavigation
-export default class DialogItem extends Component {
+class DialogItem extends Component {
+  onPress = () => {
+    const {item: chat, navigation} = this.props;
+
+    const chatName = getChatName(chat);
+    navigation.navigate('Chat', {chat, chatName});
+  }
+
   render() {
-    const {item, editing, navigation} = this.props;
-    const chatName = item.name;
+    const {item: chat, editing} = this.props;
+    const chatName = getChatName(chat);
+    const unreadCount = chat.unreadCount;
 
     return (
       <View style={styles.block}>
@@ -21,36 +33,58 @@ export default class DialogItem extends Component {
             size={25}
           />
         </View>
-        <View style={styles.innerBlock}>
-          <TouchableOpacity onPress={() => navigation.navigate('Chat', {chatName})}>
-            <View style={styles.innerContainer}>
-              <View style={styles.iconBlockShow}>
-                <MaterialInitials
-                  style={{alignSelf: 'center'}}
-                  backgroundColor={cs.primaryColor}
-                  color={'white'}
-                  size={40}
-                  text={chatName}
-                  single={true}
-                />
+        <View style={styles.innerContainer}>
+          <View style={[styles.innerBlock, {flexGrow: 4}]}>
+            <TouchableOpacity onPress={this.onPress}>
+              <View style={styles.innerContainer}>
+                <View style={styles.iconBlockShow}>
+                  <MaterialInitials
+                    style={{alignSelf: 'center'}}
+                    backgroundColor={cs.primaryColor}
+                    color={'white'}
+                    size={40}
+                    text={chatName}
+                    single={true}
+                  />
+                </View>
+                <View style={styles.innerBlock}>
+                  <Text style={styles.header}>{chatName}</Text>
+                  <Text style={styles.text}>{'public chat'}</Text>
+                </View>
               </View>
-              <View style={styles.innerBlock}>
-                <Text style={styles.header}>{chatName}</Text>
-                <Text style={styles.text}>{'public chat'}</Text>
-              </View>
+            </TouchableOpacity>
+          </View>
+          <View style={[styles.innerBlock, styles.innerBlockUnread]}>
+            <View style={unreadCount ? styles.unreadCountWrapper : ''}>
+              <Text style={unreadCount ? styles.unreadCount : ''}>{unreadCount === 0 ? null : unreadCount}</Text>
             </View>
-          </TouchableOpacity>
+          </View>
         </View>
       </View>
     );
   }
 }
 
+
+export default connect(
+  ({chatState}) => ({
+    chats: chatState.chats
+  }),
+  (dispatch) => ({
+    messageActions: bindActionCreators(messageActions, dispatch),
+  })
+)(DialogItem);
+
 const styles = StyleSheet.create({
   innerContainer: {
+    flexGrow: 1,
     justifyContent: 'space-between',
     display: 'flex',
     flexDirection: 'row'
+  },
+  innerContainerCenter: {
+    flexGrow: 2,
+    alignItems: "center"
   },
   container: {
     backgroundColor: "black",
@@ -69,8 +103,20 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     color: "black",
   },
+  unreadCount: {
+    color: 'white',
+  },
+  unreadCountWrapper: {
+    borderColor: 'black',
+    minWidth: 20,
+    borderRadius: 15,
+    backgroundColor: "#D02129",
+    justifyContent: "center",
+    padding: 5,
+    flexDirection: 'row',
+    marginLeft: 30,
+  },
   block: {
-    justifyContent: 'space-between',
     backgroundColor: 'white',
     flexDirection: 'row',
     height: 70,
@@ -100,5 +146,10 @@ const styles = StyleSheet.create({
   innerBlock: {
     flex: 1,
     marginTop: 4,
+  },
+  innerBlockUnread: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
   }
 });

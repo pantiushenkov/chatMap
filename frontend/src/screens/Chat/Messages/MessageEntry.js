@@ -23,15 +23,11 @@ export class MessageEntry extends Component {
 
   sendChat = () => {
     const {chatInput} = this.state;
-    if (chatInput) {
-      console.log('text', chatInput);
+    this.props.chat.emit("message", {
+      text: chatInput
+    });
 
-      this.props.chat.emit("message", {
-        text: chatInput
-      });
-
-      this.setState({chatInput: ""});
-    }
+    this.setState({chatInput: ""});
   };
 
   setChatInput = (value) => {
