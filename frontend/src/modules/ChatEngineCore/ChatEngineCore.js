@@ -23,12 +23,13 @@ class ChatEngineCore extends React.Component {
     chat.plugin(unreadMessages());
 
     chat.on('$.connected', () => {
+
       chat.unreadMessages.inactive();
 
       console.log('chat.unread', chat.unread);
 
       chat.on('$unread', (payload) => {
-        chatActions.initChat({chat: payload.chat, chatName});
+        // chatActions.initChat({chat: payload.chat, chatName});
       });
 
       chatActions.initChat({chat, chatName});
@@ -69,7 +70,7 @@ class ChatEngineCore extends React.Component {
             }
           }
         });
-        
+
 
       pubnub.subscribe({
           channels: ['eon-map-geolocation-output', 'pubnub-gif-chat'],

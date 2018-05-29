@@ -20,6 +20,7 @@ class DialogItem extends Component {
 
   render() {
     const {item: chat, editing} = this.props;
+    console.log(chat);
     const chatName = getChatName(chat);
     const unreadCount = chat.unreadCount;
 
